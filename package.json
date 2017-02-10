@@ -1,0 +1,25 @@
+{
+  "name": "eth-ipld",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "eth-ipld": "./bin.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ethereumjs-block": "^1.5.0",
+    "ethereumjs-util": "^5.1.0",
+    "get-stdin": "^5.0.1",
+    "ipld-eth-block": "^2.2.1",
+    "merkle-patricia-tree": "^2.1.2",
+    "mississippi": "^1.3.0",
+    "rlp": "^2.0.0",
+    "text-table": "^0.2.0",
+    "yargs": "^6.6.0"
+  }
+}

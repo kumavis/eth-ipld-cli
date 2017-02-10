@@ -10,33 +10,37 @@ module.exports = {
 
   description: 'Parse an ethereum block header',
 
+  builder: (yargs) => {
+    return yargs.option('body', {
+      alias: 'b',
+      describe: 'expect raw to be block body, not just header',
+      default: false,
+    })
+  },
+
   handler: function (argv) {
-    // const sink = concatStream((rawBlock) => {
-    //   const header = new EthBlock(rawBlock).header
-    //   // const header = new EthBlockHeader(rawBlock)
-    //   console.log(JSON.stringify(ethObjToJson(header), null, 2))
-    // })
-    // process.stdin.pipe(sink)
-    // sink.on('error', console.error)
     if (process.stdin.isTTY) {
-      const blockHex = ethUtil.stripHexPrefix(argv.block)
-      const rawBlock = new Buffer(blockHex, 'hex')
-      logBlock(rawBlock)
+      throw new Error('Expected stdin.')
     } else {
-      getStdin()
+      getStdin.buffer()
       .then((rawBlock) => {
-        logBlock(rawBlock)
+        let header
+        if (argv.body) {
+          header = new EthBlock(rawBlock).header
+        } else {
+          header = new EthBlockHeader(rawBlock)
+        }
+        logBlock(header)
       })
       .catch((err) => {
         console.error(err)
       })
     }
 
-    function logBlock(rawBlock) {
-      const header = new EthBlock(rawBlock).header
+    function logBlock(header) {
       console.log(JSON.stringify(ethObjToJson(header), null, 2))
     }
-  }
+  },
 }
 
 function ethObjToJson(obj){

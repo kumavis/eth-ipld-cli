@@ -1,18 +1,14 @@
 'use strict'
 const concatStream = require('mississippi').concat
+const EthAccount = require('ethereumjs-account')
 const getStdin = require('get-stdin')
-const rlp = require('rlp')
 const ethUtil = require('ethereumjs-util')
 
+
 module.exports = {
-  command: 'rlp',
+  command: 'account',
 
-  description: 'Parse Ethereum RLP',
-
-  // dont parse hash as Number '_'
-  builder: function (yargs) {
-    return yargs.string(['_'])
-  },
+  description: 'Parse an ethereum acccount',
 
   handler: function (argv) {
     if (process.stdin.isTTY) {
@@ -26,13 +22,22 @@ module.exports = {
           hexData = hexData.split('\n').join('')
           rawData = ethUtil.toBuffer(hexData)
         }
-        const parsed = rlp.decode(rawData)
-        console.log(parsed.map((buf) => buf.toString('hex')))
+        const account = new EthAccount(rawData)
+        console.log(JSON.stringify(ethObjToJson(account), null, 2))
       })
       .catch((err) => {
         console.error(err)
       })
     }
+  },
+}
 
-  }
+function ethObjToJson(obj){
+  const result = {}
+  obj._fields.forEach((field) => {
+    let value = obj[field]
+    if (Buffer.isBuffer(value)) value = '0x'+value.toString('hex')
+    result[field] = value
+  })
+  return result
 }

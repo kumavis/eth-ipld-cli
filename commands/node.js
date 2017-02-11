@@ -1,6 +1,8 @@
 'use strict'
 const EthTrieNode = require('merkle-patricia-tree/trieNode')
 const getStdin = require('get-stdin')
+const rlp = require('rlp')
+const ethUtil = require('ethereumjs-util')
 
 module.exports = {
   command: 'node',
@@ -15,6 +17,12 @@ module.exports = {
     } else {
       getStdin.buffer()
       .then((rawData) => {
+        const hexEncoded = (rawData.slice(0,2).toString('utf8') === '0x')
+        if (hexEncoded) {
+          let hexData = rawData.toString('utf8')
+          hexData = hexData.split('\n').join('')
+          rawData = ethUtil.toBuffer(hexData)
+        }
         logNode(rawData)
       })
       .catch((err) => {
@@ -23,21 +31,20 @@ module.exports = {
     }
 
     function logNode(rawNode) {
-      // console.log(rawNode.toString('hex'))
-      // console.log('rlp:',require('rlp').decode(rawNode))
-      rawNode = require('rlp').decode(rawNode)
-      const node = new EthTrieNode(rawNode)
+      const node = new EthTrieNode(rlp.decode(rawNode))
       const children = {}
       node.getChildren().map((childData) => {
-        const keyNibbles = childData[0]
+        const keyNibbles = childData[0] 
         const keyLength = keyNibbles.length
         const key = new Buffer(keyNibbles).toString('hex').slice(-keyLength)
         const value = childData[1].toString('hex')
         children[key] = value
       })
+      const value = ethUtil.bufferToHex(node.getValue())
       console.log(JSON.stringify({
         type: node.type,
         children,
+        value,
       }, null, 2))
       // console.log(JSON.stringify(ethObjToJson(node), null, 2))
     }

@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ethereumjs-account": "^2.0.4",
     "ethereumjs-block": "^1.5.0",
     "ethereumjs-util": "^5.1.0",
     "get-stdin": "^5.0.1",

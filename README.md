@@ -3,7 +3,7 @@
 ### cid
 
 ```
-ipld-eth cid 0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421
+eth-ipld cid 0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421
 ```
 ```
           eth-block  z43AaGExa3pXMbZ2ea4Q4RfQrpUwrFmyWj8M325QXzqt5bhrBpk

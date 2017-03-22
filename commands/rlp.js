@@ -27,7 +27,9 @@ module.exports = {
           rawData = ethUtil.toBuffer(hexData)
         }
         const parsed = rlp.decode(rawData)
-        console.log(parsed.map((buf) => buf.toString('hex')))
+        const hexArray = parsed.map((buf) => buf.toString('hex'))
+        const output = JSON.stringify(hexArray, null, 2)
+        console.log(output)
       })
       .catch((err) => {
         console.error(err)

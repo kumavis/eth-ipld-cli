@@ -22,5 +22,13 @@
     "rlp": "^2.0.0",
     "text-table": "^0.2.0",
     "yargs": "^6.6.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/kumavis/eth-ipld-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kumavis/eth-ipld-cli/issues"
+  },
+  "homepage": "https://github.com/kumavis/eth-ipld-cli#readme"
 }

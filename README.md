@@ -1,5 +1,11 @@
 # eth-ipld cli util
 
+## Installation
+
+`npm install -g eth-ipld`
+
+## Usage
+
 ### cid
 
 ```
@@ -47,7 +53,7 @@ curl 'http://localhost:5001/api/v0/block/get?arg=z43AaGEywSDX5PUJcrn5GfZmb6FjisJ
 parse a binary trie node
 
 ```
-curl 'http://localhost:5001/api/v0/block/get?arg=z45oqTRzb9a5xyvx5RbfSXH1K5jibyZ4AxnXyYReuLw7KU5veYw' | eth-ipld node 
+curl 'http://localhost:5001/api/v0/block/get?arg=z45oqTRzb9a5xyvx5RbfSXH1K5jibyZ4AxnXyYReuLw7KU5veYw' | eth-ipld node
 ```
 ```
 {

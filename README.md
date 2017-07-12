@@ -1,5 +1,7 @@
 # eth-ipld cli util
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/kumavis/eth-ipld-cli.svg)](https://greenkeeper.io/)
+
 ## Installation
 
 `npm install -g eth-ipld`

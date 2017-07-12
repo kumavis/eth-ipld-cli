@@ -16,11 +16,10 @@
     "ethereumjs-block": "^1.5.0",
     "ethereumjs-util": "^5.1.0",
     "get-stdin": "^5.0.1",
-    "ipld-eth-block": "^2.2.1",
+    "ipld-eth-star": "^1.4.1",
     "merkle-patricia-tree": "^2.1.2",
     "mississippi": "^1.3.0",
     "rlp": "^2.0.0",
-    "text-table": "^0.2.0",
     "yargs": "^6.6.0"
   },
   "repository": {

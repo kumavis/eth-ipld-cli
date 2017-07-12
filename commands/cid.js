@@ -1,6 +1,6 @@
 'use strict'
 const concatStream = require('mississippi').concat
-const cidForHash = require('ipld-eth-block/src/common').cidForHash
+const cidFromHash = require('ipld-eth-star/util/cidFromHash')
 const ethUtil = require('ethereumjs-util')
 const getStdin = require('get-stdin')
 
@@ -38,14 +38,14 @@ module.exports = {
 
 function logCidTable(hash){
   console.log(JSON.stringify({
-    'raw': cidForHash('raw', hash).toBaseEncodedString(),
-    'eth-block': cidForHash('eth-block', hash).toBaseEncodedString(),
-    'eth-block-list': cidForHash('eth-block-list', hash).toBaseEncodedString(),
-    'eth-tx-trie': cidForHash('eth-tx-trie', hash).toBaseEncodedString(),
-    'eth-tx': cidForHash('eth-tx', hash).toBaseEncodedString(),
-    'eth-tx-receipt-trie': cidForHash('eth-tx-receipt-trie', hash).toBaseEncodedString(),
-    'eth-tx-receipt': cidForHash('eth-tx-receipt', hash).toBaseEncodedString(),
-    'eth-state-trie': cidForHash('eth-state-trie', hash).toBaseEncodedString(),
-    'eth-storage-trie': cidForHash('eth-storage-trie', hash).toBaseEncodedString(),
+    'raw': cidFromHash('raw', hash).toBaseEncodedString(),
+    'eth-block': cidFromHash('eth-block', hash).toBaseEncodedString(),
+    'eth-block-list': cidFromHash('eth-block-list', hash).toBaseEncodedString(),
+    'eth-tx-trie': cidFromHash('eth-tx-trie', hash).toBaseEncodedString(),
+    'eth-tx': cidFromHash('eth-tx', hash).toBaseEncodedString(),
+    'eth-tx-receipt-trie': cidFromHash('eth-tx-receipt-trie', hash).toBaseEncodedString(),
+    'eth-tx-receipt': cidFromHash('eth-tx-receipt', hash).toBaseEncodedString(),
+    'eth-state-trie': cidFromHash('eth-state-trie', hash).toBaseEncodedString(),
+    'eth-storage-trie': cidFromHash('eth-storage-trie', hash).toBaseEncodedString(),
   }, null, 2))
 }

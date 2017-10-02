@@ -3,6 +3,7 @@ const concatStream = require('mississippi').concat
 const getStdin = require('get-stdin')
 const ethBlockHeaderFromRpc = require('ethereumjs-block/header-from-rpc')
 const ethUtil = require('ethereumjs-util')
+const EthTransaction = require('ethereumjs-tx')
 
 
 module.exports = {
@@ -16,7 +17,7 @@ module.exports = {
     .string(['_'])
     .option('result', {
       alias: 'r',
-      describe: 'expect the block wrapped in an rpc result body',
+      describe: 'expect the params wrapped in an rpc result body',
       default: false,
     })
   },
@@ -27,15 +28,23 @@ module.exports = {
     } else {
       const type = argv.type
       getStdin()
-      .then((resJson) => {
+      .then((rawRes) => {
+        let resJson = JSON.parse(rawRes)
+        if (argv.result) resJson = resJson.result
         switch (type) {
+
           case 'block':
-            let blockJson = JSON.parse(resJson)
-            if (argv.result) blockJson = blockJson.result
-            const blockHeader = ethBlockHeaderFromRpc(blockJson)
+            const blockHeader = ethBlockHeaderFromRpc(resJson)
             const rawBlock = blockHeader.serialize()
             process.stdout.write(rawBlock)
             return
+
+          case 'tx':
+            const tx = new EthTransaction(resJson)
+            const rawTx = tx.serialize()
+            process.stdout.write(rawTx)
+            return
+
           default:
             throw new Error(`Unsupported rpc type "${type}"`)
         }

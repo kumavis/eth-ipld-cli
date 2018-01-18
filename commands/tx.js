@@ -1,7 +1,7 @@
 'use strict'
 const EthTransaction = require('ethereumjs-tx')
 const getStdin = require('get-stdin')
-
+const ethUtil = require('ethereumjs-util')
 
 module.exports = {
   command: 'tx',
@@ -18,8 +18,14 @@ module.exports = {
       throw new Error('Expected stdin.')
     } else {
       getStdin.buffer()
-      .then((rawBlock) => {
-        const tx = new EthTransaction(rawBlock)
+      .then((rawData) => {
+        const hexEncoded = (rawData.slice(0,2).toString('utf8') === '0x')
+        if (hexEncoded) {
+          let hexData = rawData.toString('utf8')
+          hexData = hexData.split('\n').join('')
+          rawData = ethUtil.toBuffer(hexData)
+        }
+        const tx = new EthTransaction(rawData)
         logTx(tx)
       })
       .catch((err) => {

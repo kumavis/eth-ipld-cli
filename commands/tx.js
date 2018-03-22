@@ -6,7 +6,7 @@ const ethUtil = require('ethereumjs-util')
 module.exports = {
   command: 'tx',
 
-  description: 'Parse an ethereum tx ',
+  description: 'Parse an ethereum tx',
 
   // dont parse hash as Number '_'
   builder: function (yargs) {
@@ -34,7 +34,9 @@ module.exports = {
     }
 
     function logTx(tx) {
-      console.log(JSON.stringify(ethObjToJson(tx), null, 2))
+      const obj = ethObjToJson(tx)
+      obj.from = ethUtil.bufferToHex(tx.from)
+      console.log(JSON.stringify(obj, null, 2))
     }
   },
 }
@@ -43,7 +45,7 @@ function ethObjToJson(obj){
   const result = {}
   obj._fields.forEach((field) => {
     let value = obj[field]
-    if (Buffer.isBuffer(value)) value = '0x'+value.toString('hex')
+    if (Buffer.isBuffer(value)) value = ethUtil.bufferToHex(value)
     result[field] = value
   })
   return result

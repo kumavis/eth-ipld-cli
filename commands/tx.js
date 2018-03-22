@@ -37,6 +37,7 @@ module.exports = {
       const obj = ethObjToJson(tx)
       obj.from = ethUtil.bufferToHex(tx.from)
       obj.chainId = tx.getChainId()
+      obj.hash = ethUtil.bufferToHex(tx.hash())
       console.log(JSON.stringify(obj, null, 2))
     }
   },

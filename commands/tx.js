@@ -36,6 +36,7 @@ module.exports = {
     function logTx(tx) {
       const obj = ethObjToJson(tx)
       obj.from = ethUtil.bufferToHex(tx.from)
+      obj.chainId = tx.getChainId()
       console.log(JSON.stringify(obj, null, 2))
     }
   },

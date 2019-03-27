@@ -1,42 +1,20 @@
 'use strict'
-const concatStream = require('mississippi').concat
+
 const cidFromHash = require('ipld-eth-star/util/cidFromHash')
-const ethUtil = require('ethereumjs-util')
-const getStdin = require('get-stdin')
+const { createCommand } = require('../util')
 
-module.exports = {
+module.exports = createCommand({
+
   command: 'cid [hash]',
-
   description: 'Generate CIDs for Ethereum hashes',
 
-  // dont parse hash as Number '_'
-  builder: function (yargs) {
-    return yargs.string(['_'])
+  onData: function (argv, data) {
+    logCidTable(data)
   },
 
-  handler: function (argv) {
-    if (process.stdin.isTTY) {
-      const hashHex = ethUtil.stripHexPrefix(argv.hash)
-      const hash = new Buffer(hashHex, 'hex')
-      logCidTable(hash)
-    } else {
-      getStdin()
-      .then((hashHex) => {
-        hashHex = hashHex.split('\n').join('')
-        hashHex = ethUtil.stripHexPrefix(hashHex)
-        console.log(`"${hashHex}"`)
-        const hash = new Buffer(hashHex, 'hex')
-        logCidTable(hash)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-    }
-
-  }
 }
 
-function logCidTable(hash){
+function logCidTable(hash) {
   console.log(JSON.stringify({
     'raw': cidFromHash('raw', hash).toBaseEncodedString(),
     'ethBlock': cidFromHash('eth-block', hash).toBaseEncodedString(),

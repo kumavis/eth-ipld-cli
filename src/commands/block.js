@@ -1,13 +1,12 @@
 'use strict'
-const concatStream = require('mississippi').concat
+
 const EthBlock = require('ethereumjs-block')
 const EthBlockHeader = require('ethereumjs-block/header')
-const getStdin = require('get-stdin')
+const { createCommand, ethObjToJson } = require('../util')
 
+module.exports = createCommand({
 
-module.exports = {
   command: 'block',
-
   description: 'Parse an ethereum block header',
 
   builder: (yargs) => {
@@ -18,37 +17,18 @@ module.exports = {
     })
   },
 
-  handler: function (argv) {
-    if (process.stdin.isTTY) {
-      throw new Error('Expected stdin.')
+  onData: function (argv, data) {
+    let header
+    if (argv.body) {
+      header = new EthBlock(data).header
     } else {
-      getStdin.buffer()
-      .then((rawBlock) => {
-        let header
-        if (argv.body) {
-          header = new EthBlock(rawBlock).header
-        } else {
-          header = new EthBlockHeader(rawBlock)
-        }
-        logBlock(header)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
+      header = new EthBlockHeader(data)
     }
-
-    function logBlock(header) {
-      console.log(JSON.stringify(ethObjToJson(header), null, 2))
-    }
+    logBlockHeader(header)
   },
-}
 
-function ethObjToJson(obj){
-  const result = {}
-  obj._fields.forEach((field) => {
-    let value = obj[field]
-    if (Buffer.isBuffer(value)) value = '0x'+value.toString('hex')
-    result[field] = value
-  })
-  return result
+})
+
+function logBlockHeader(header) {
+  console.log(JSON.stringify(ethObjToJson(header), null, 2))
 }

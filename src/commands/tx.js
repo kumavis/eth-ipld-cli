@@ -1,54 +1,51 @@
 'use strict'
+
 const EthTransaction = require('ethereumjs-tx')
-const getStdin = require('get-stdin')
+const rlp = require('rlp')
 const ethUtil = require('ethereumjs-util')
+const { createCommand, ethObjToJson } = require('../util')
 
-module.exports = {
+module.exports = createCommand({
+  
   command: 'tx',
-
   description: 'Parse an ethereum tx',
 
-  // dont parse hash as Number '_'
-  builder: function (yargs) {
-    return yargs.string(['_'])
+  onData: function (argv, data) {
+    const txObj = dataToTxObj(data)
+    console.log(JSON.stringify(txObj, null, 2))
   },
 
-  handler: function (argv) {
-    if (process.stdin.isTTY) {
-      throw new Error('Expected stdin.')
-    } else {
-      getStdin.buffer()
-      .then((rawData) => {
-        const hexEncoded = (rawData.slice(0,2).toString('utf8') === '0x')
-        if (hexEncoded) {
-          let hexData = rawData.toString('utf8')
-          hexData = hexData.split('\n').join('')
-          rawData = ethUtil.toBuffer(hexData)
-        }
-        const tx = new EthTransaction(rawData)
-        logTx(tx)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-    }
+})
 
-    function logTx(tx) {
-      const obj = ethObjToJson(tx)
-      obj.from = ethUtil.bufferToHex(tx.from)
-      obj.chainId = tx.getChainId()
-      obj.hash = ethUtil.bufferToHex(tx.hash())
-      console.log(JSON.stringify(obj, null, 2))
+function dataToTxObj (data) {
+  let txObj
+  try {
+    const ethTx = new EthTransaction(data)
+    txObj = ethTxToJson(ethTx)
+  } catch (err) {
+    // fallback to rlp decode
+    const parsed = rlp.decode(data)
+    const hexArray = parsed.map((buf) => '0x' + buf.toString('hex'))
+    txObj = {
+      invalid: err.message,
+      nonce: hexArray[0],
+      gasPrice: hexArray[1],
+      gasLimit: hexArray[2],
+      to: hexArray[3],
+      value: hexArray[4],
+      data: hexArray[5],
+      v: hexArray[6],
+      r: hexArray[7],
+      s: hexArray[8],
     }
-  },
+  }
+  return txObj
 }
 
-function ethObjToJson(obj){
-  const result = {}
-  obj._fields.forEach((field) => {
-    let value = obj[field]
-    if (Buffer.isBuffer(value)) value = ethUtil.bufferToHex(value)
-    result[field] = value
-  })
-  return result
+function ethTxToJson (ethTx) {
+  const obj = ethObjToJson(ethTx)
+  obj.from = ethUtil.bufferToHex(ethTx.from)
+  obj.chainId = ethTx.getChainId()
+  obj.hash = ethUtil.bufferToHex(ethTx.hash())
+  return obj
 }

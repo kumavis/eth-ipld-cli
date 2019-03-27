@@ -1,7 +1,7 @@
 {
   "name": "eth-ipld",
   "version": "3.0.0",
-  "description": "",
+  "description": "a cli tool for dealing with raw ethereum and eth-ipfs data",
   "main": "index.js",
   "bin": {
     "eth-ipld": "./src/bin.js"
@@ -30,5 +30,9 @@
   "bugs": {
     "url": "https://github.com/kumavis/eth-ipld-cli/issues"
   },
-  "homepage": "https://github.com/kumavis/eth-ipld-cli#readme"
+  "homepage": "https://github.com/kumavis/eth-ipld-cli#readme",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {}
 }

@@ -1,5 +1,7 @@
 # eth-ipld cli util
 
+a cli tool for dealing with raw ethereum and eth-ipfs data
+
 ## Installation
 
 `npm install -g eth-ipld`

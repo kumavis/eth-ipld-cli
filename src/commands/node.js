@@ -14,7 +14,7 @@ module.exports = createCommand({
     logNode(data) 
   },
 
-}
+})
 
 function logNode(rawNode) {
   const node = new EthTrieNode(rlp.decode(rawNode))

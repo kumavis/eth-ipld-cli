@@ -12,7 +12,7 @@ module.exports = createCommand({
     logCidTable(data)
   },
 
-}
+})
 
 function logCidTable(hash) {
   console.log(JSON.stringify({
